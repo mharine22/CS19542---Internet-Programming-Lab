@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place a Bid</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="bg-dark text-white text-center p-3">
+        <h1>Place Your Bid</h1>
+    </header>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" id="item-title"></h5>
+                <p class="card-text" id="item-description"></p>
+
+                <input type="hidden" id="end_time"> <!-- Hidden end time -->
+
+                <form id="bidForm" action="/place_bid" method="POST" class="mt-4">
+                    <input type="hidden" name="item_id" id="item_id">
+                    <div class="form-group">
+                        <label for="bid_amount">Bid Amount:</label>
+                        <input type="number" step="0.01" id="bid_amount" name="bid_amount" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Place Bid</button>
+                </form>
+
+                <div id="error-message" class="alert alert-danger mt-3 d-none"></div>
+                <h5 class="mt-4">Previous Bids:</h5>
+                <ul id="bids-list" class="list-group"></ul> <!-- List for displaying previous bids -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center p-3 mt-5">
+        <p>&copy; 2024 Online Auction System. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        const itemId = new URLSearchParams(window.location.search).get('id');
+
+        // Simulating fetching auction item details
+        const itemDetails = {
+            id: '1', // Replace with actual item ID
+            name: 'Sample Item',
+            description: 'This is a sample item description.',
+            starting_price: '100.00',
+            end_time: '2024-10-25T12:00:00Z' // Replace with actual end time
+        };
+
+        // Populate item details into the page
+        document.getElementById('item_id').value = itemDetails.id;
+        document.getElementById('item-title').textContent = itemDetails.name;
+        document.getElementById('item-description').textContent = `Item description: ${itemDetails.description}. Starting price: $${itemDetails.starting_price}`;
+        document.getElementById('end_time').value = itemDetails.end_time; // Set hidden end_time
+
+        // Fetch previous bids from the server
+        fetch(`/api/bids?item_id=${itemId}`)
+            .then(response => response.json())
+            .then(bids => {
+                const bidsList = document.getElementById('bids-list');
+                bids.forEach(bid => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = `${bid.username} bid $${bid.amount} on ${new Date(bid.timestamp).toLocaleString()}`;
+                    bidsList.appendChild(listItem);
+                });
+            })
+            .catch(err => console.error('Error fetching bids:', err));
+
+        document.getElementById('bidForm').addEventListener('submit', function(event) {
+            const endTime = new Date(document.getElementById('end_time').value);
+            const currentTime = new Date();
+
+            console.log("End Time:", endTime);
+            console.log("Current Time:", currentTime);
+
+            if (currentTime >= endTime) {
+                event.preventDefault();
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = "The auction has already ended. You cannot place a bid.";
+                errorMessage.classList.remove('d-none');
+            } else {
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.classList.add('d-none');
+                // Show a success message after form submission
+                alert("Your bid has been placed successfully!");
+            }
+        });
+    </script>
+</body>
+</html>

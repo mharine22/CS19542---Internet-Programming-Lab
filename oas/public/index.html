@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Auction System</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-dark text-white text-center p-3">
+        <h1>Welcome to the Online Auction</h1>
+        <p>Bid and win amazing items!</p>
+    </header>
+
+    <!--carosel-->
+    <div id="carouselExample" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="d-flex justify-content-center">
+                    <img src="/images/image1.jpeg" class="img-fluid" style="max-width: 70%; height: auto;" alt="Auction Item 1">
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center">
+                    <img src="/images/image2.jpeg" class="img-fluid" style="max-width: 70%; height: auto;" alt="Auction Item 2">
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center">
+                    <img src="/images/image3.jpeg" class="img-fluid" style="max-width: 70%; height: auto;" alt="Auction Item 3">
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    
+       
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <a href="register.html" class="btn btn-primary btn-lg btn-block">Register</a>
+            </div>
+            <div class="col-md-6">
+                <a href="login.html" class="btn btn-secondary btn-lg btn-block">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center p-3 mt-5">
+        <p>&copy; 2024 Online Auction System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Display success message as alert box if present in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        if (message) {
+            alert(message);
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

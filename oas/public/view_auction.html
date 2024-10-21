@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Auction Items and Bids</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/view_auction.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-dark text-white text-center p-3">
+        <h1>Online Auction System</h1>
+    </header>
+
+    <!-- Navigation -->
+    <div class="container mt-4">
+        <a href="upload_item.html" class="btn btn-success mb-3">Upload New Auction Item</a>
+    </div>
+
+    <!-- Available Auction Items -->
+    <div class="container mt-4">
+        <h2>Available Auction Items</h2>
+        <div class="row" id="auction-items">
+            <!-- Auction items will be dynamically populated here -->
+        </div>
+    </div>
+
+    <!-- Bids List -->
+    <div class="container mt-4">
+        <h2>Bids on Auction Items</h2>
+        <ul class="list-group" id="bids-list">
+            <!-- Bids will be dynamically populated here -->
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center p-3 mt-5">
+        <p>&copy; 2024 Online Auction System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Fetch auction items and bids
+        async function fetchAuctionItems() {
+            const response = await fetch('/api/auction_items');
+            const items = await response.json();
+            const itemsContainer = document.getElementById('auction-items');
+
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'col-md-4 mb-4';
+                itemDiv.innerHTML = `
+                    <div class="card">
+                        <img src="${item.image}" class="card-img-top" alt="${item.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.name}</h5>
+                            <p class="card-text">${item.description}</p>
+                            <p class="card-text"><strong>Starting Price:</strong> $${item.starting_price}</p>
+                            <a href="/bid?id=${item.id}" class="btn btn-primary">Place a Bid</a>
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemDiv);
+            });
+        }
+
+        async function fetchBids() {
+            const response = await fetch('/api/bids');
+            const bids = await response.json();
+            const bidsList = document.getElementById('bids-list');
+
+            bids.forEach(bid => {
+                const bidItem = document.createElement('li');
+                bidItem.className = 'list-group-item';
+                bidItem.innerHTML = `${bid.username} placed a bid of $${bid.amount} on ${new Date(bid.timestamp).toLocaleString()}`;
+                bidsList.appendChild(bidItem);
+            });
+        }
+
+        // Execute fetch functions
+        fetchAuctionItems();
+        fetchBids();
+    </script>
+</body>
+</html>
